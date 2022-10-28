@@ -16,7 +16,5 @@
 
 .history
 .vscode
-bin/epub2pdf
-bin/epub2pdf.exe
-bin/epub2pdf.app
+bin
 output

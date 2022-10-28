@@ -5,7 +5,10 @@ import (
 	"runtime"
 )
 
+var Version string = ""
+
 func main() {
+	cmd.CurrentVersion = Version
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	cmd.Execute()
 }
