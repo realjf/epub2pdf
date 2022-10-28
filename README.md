@@ -1,9 +1,9 @@
 # epub2pdf
 convert epub to pdf
 
-## Features
+[comment]: # (## Features)
 
-- support linux/windows/macOS
+[comment]: # (- support linux/windows/macOS)
 
 ## Required
 - need to install [`calibre`](https://calibre-ebook.com/download)
