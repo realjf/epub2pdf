@@ -13,3 +13,10 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+.history
+.vscode
+bin/epub2pdf
+bin/epub2pdf.exe
+bin/epub2pdf.app
+output
