@@ -13,7 +13,7 @@ convert epub to pdf
 ## Quick start
 ### Option 1: Download binary
 
-see release
+[see release](https://github.com/realjf/epub2pdf/releases)
 
 
 ### Option 2: Build from source code
