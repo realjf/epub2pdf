@@ -6,6 +6,3 @@ convert epub to pdf
 - need to install [`calibre`](https://calibre-ebook.com/download)
 - add `calibre` to PATH Environment Variable
 
-
-## Features
-- support linux/windows/macOS
