@@ -25,18 +25,18 @@ see release
 ```sh
 make build
 cd bin
-./epub2pdf /path/to/epub_directory
+./epub2pdf convert /path/to/epub_directory
 ```
 **`Windows`**
 ```powershell
 make.exe build_win
 cd bin
-epub2pdf.exe /path/to/epub_directory
+epub2pdf.exe convert /path/to/epub_directory
 ```
 **`MacOS`**
 ```sh
 make build_darwin
 cd bin
-epub2pdf.app /path/to/epub_directory
+epub2pdf convert /path/to/epub_directory
 ```
 
