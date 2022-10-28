@@ -68,7 +68,7 @@ func getPaths(root string) []string {
 }
 
 func Convert(rootpath string) {
-	convertPool := gopool.NewPool(10)
+	convertPool := gopool.NewPool(JobsNum)
 	files := getPaths(rootpath)
 	convertPool.SetTaskNum(len(files))
 

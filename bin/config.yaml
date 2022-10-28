@@ -1,7 +1,0 @@
-# output more details
-log:
-  debug: true
-
-# calibre's tool: ebook-convert path
-ebookconvert:
-  path: "ebook-convert"
