@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 	Short: "convert epub to pdf",
 	Long:  `Convert the specified directory epub file to pdf file`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 先清理output目录
+		// clean output directory
 		CleanDir()
 		//
 		if len(args) > 1 {
@@ -31,7 +31,7 @@ var rootCmd = &cobra.Command{
 
 		}
 
-		// 批量转换格式
+		// start to convert
 		Convert(args[0])
 	},
 }
@@ -43,7 +43,7 @@ func Execute() {
 	}
 }
 
-// 清空目录
+// clean output directory
 func CleanDir() {
 	dir := "./output"
 	d, err := os.Open(dir)
@@ -62,5 +62,5 @@ func CleanDir() {
 			panic(err)
 		}
 	}
-	log.Info("清理目录output完成")
+	log.Info("output directory is clean")
 }

@@ -1,4 +1,4 @@
-# 详细日志输出
+# output more details
 log:
   debug: true
 

@@ -55,7 +55,7 @@ func getPaths(root string) []string {
 		ex := f[1]
 		formatOk := formats[ex]
 		if !formatOk {
-			// 过滤非epub格式文件
+			// filter epub format
 			continue
 		}
 		// add filename to slice
@@ -72,7 +72,7 @@ func Convert(rootpath string) {
 	files := getPaths(rootpath)
 	convertPool.SetTaskNum(len(files))
 
-	// 添加任务
+	// add task
 	go func() {
 		for _, filename := range files {
 			x := filename
