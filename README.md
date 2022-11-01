@@ -43,5 +43,8 @@ cd bin
 epub2pdf convert /path/to/epub_directory
 ```
 
+**Output**
+The output is in `./output`
+
 ## License
 epub2pdf is released under the Apache 2.0 license. See [LICENSE](https://github.com/realjf/epub2pdf/blob/master/LICENSE)
