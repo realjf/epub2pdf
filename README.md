@@ -11,6 +11,9 @@ convert epub to pdf
 - allow N jobs at once by -j=N
 - optimize code
 
+## Supported Convert
+- epub to pdf
+
 
 ## Required
 - need to install [`calibre`](https://calibre-ebook.com/download)
