@@ -9,6 +9,7 @@ convert epub to pdf
 - output details by -v
 - output debug details by -m
 - allow N jobs at once by -j=N
+- delete source file by -d
 - optimize code
 
 ## Supported Convert

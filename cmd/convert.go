@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strconv"
 	"syscall"
@@ -20,16 +19,17 @@ import (
 func init() {
 	// convertCmd.Flags().StringVarP(&EbookConvertPath, "ebook-convert-path", "p", "ebook-convert", "The ebook-convert executable path")
 	convertCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "Verbose output")
-	convertCmd.Flags().BoolVarP(&MoreVerbose, "more-verbose", "m", false, "output the converted output")
+	convertCmd.Flags().BoolVarP(&MoreVerbose, "more-verbose", "m", false, "Output the converted output")
 	convertCmd.Flags().IntVarP(&JobsNum, "jobs", "j", 5, "Allow N jobs at once; infinite jobs with no arg")
 	convertCmd.Flags().StringVarP(&OutputPath, "output-path", "o", "", "Output path, by default, is the source directory")
 	convertCmd.Flags().BoolVarP(&Recursive, "recursive", "r", false, "Recursively search the directory that contains an epub file")
 	convertCmd.Flags().StringVarP(&ToBeConvertedPath, "path-to-convert", "f", "", "The path to be converted, required")
+	convertCmd.Flags().BoolVarP(&DeleteSource, "delete-source", "d", false, "Delete the source file when convert successfully")
 	rootCmd.AddCommand(convertCmd)
 }
 
 var convertCmd = &cobra.Command{
-	Use:   "convert </path/to/epub_directory>",
+	Use:   "convert -f=</path/to/epub_directory>",
 	Short: "convert epub to pdf",
 	Long:  `Convert the specified directory epub file to pdf file`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -49,31 +49,6 @@ var convertCmd = &cobra.Command{
 		// start to convert
 		Convert()
 	},
-}
-
-func moveToOutput(rootpath, file string) {
-	input_file := path.Join(rootpath, file)
-	output_file := path.Join(rootpath, file)
-	if OutputPath != "" {
-		abspath, err := filepath.Abs(OutputPath)
-		if err != nil {
-			log.Error("get output directory error: %s", err.Error())
-			return
-		}
-		output_file = path.Join(abspath, file)
-	}
-
-	err := os.Rename(input_file, output_file)
-	if err != nil {
-		log.Error(color.InRed("move " + input_file + " error: " + err.Error()))
-	}
-}
-
-func deleteEpub(root, file string) {
-	err := os.Remove(root + file)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func getPaths(root string) []*FileObj {
@@ -148,8 +123,11 @@ func getPaths(root string) []*FileObj {
 }
 
 func Convert() {
-	convertPool := gopool.NewPool(JobsNum)
 	files := getPaths(ToBeConvertedPath)
+	if len(files) < JobsNum {
+		JobsNum = len(files)
+	}
+	convertPool := gopool.NewPool(JobsNum)
 	convertPool.SetTaskNum(len(files))
 
 	log.Info(color.InRed(strconv.Itoa(len(files))) + " files to be converted")
@@ -204,7 +182,7 @@ func Convert() {
 				}
 
 				if err != nil {
-					log.Error(color.InRed("======== failed to convert " + input_file + " =========="))
+					log.Error(color.InRed("======== failed to convert " + input_file + " ========"))
 					log.Error(color.InRed(err.Error()))
 					return
 				}
@@ -213,7 +191,13 @@ func Convert() {
 			}
 			myTaskCallbackFunc := func(param interface{}) (e error, r interface{}) {
 				input_file := param.(*FileObj).Abs()
-				log.Info(color.InGreen("======== convert " + input_file + " successfully =========="))
+				log.Info(color.InGreen("======== convert " + input_file + " successfully ========"))
+				if DeleteSource {
+					err := deleteFile(input_file)
+					if err != nil {
+						log.Error("========= delete " + input_file + " error: " + color.InRed(err.Error()) + " ========")
+					}
+				}
 				return
 			}
 			task := gopool.NewTask(myTaskFunc, myTaskCallbackFunc, x)

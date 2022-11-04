@@ -15,6 +15,7 @@ var JobsNum int = 5
 var OutputPath string = ""
 var Recursive bool = false        // recursive directory
 var ToBeConvertedPath string = "" // the directory to be converted
+var DeleteSource bool = false     // delete the source file when convert successfully
 
 var rootCmd = &cobra.Command{
 	Use: "epub2pdf",
