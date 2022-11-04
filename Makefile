@@ -1,4 +1,4 @@
-VERSION="0.0.1"
+VERSION="0.0.2"
 BIN="bin/epub2pdf"
 BIN_WIN=".exe"
 BIN_MACOS=""

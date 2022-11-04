@@ -16,5 +16,4 @@
 
 .history
 .vscode
-bin/epub2pdf*
-output
+bin

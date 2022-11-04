@@ -12,6 +12,12 @@ convert epub to pdf
 - need to install [`calibre`](https://calibre-ebook.com/download)
 - add `calibre` and `ebook-convert` to `PATH` environment variable
 
+linux user can run like this to install calibre
+
+```sh
+sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
+```
+
 
 ## Quick start
 ### Option 1: Download binary
@@ -44,7 +50,7 @@ epub2pdf convert /path/to/epub_directory
 ```
 
 **Output**
-The output is in `./output`
+The output default is in source directory
 
 ## License
 epub2pdf is released under the Apache 2.0 license. See [LICENSE](https://github.com/realjf/epub2pdf/blob/master/LICENSE)
