@@ -8,11 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Verbose bool
+var Verbose bool = false
+var MoreVerbose bool = false                  // output the converted output
 var EbookConvertPath string = "ebook-convert" // the ebook-convert executable path, need to install calibre
-var JobsNum int
+var JobsNum int = 5
 var OutputPath string = ""
-var Recursive bool                // recursive directory
+var Recursive bool = false        // recursive directory
 var ToBeConvertedPath string = "" // the directory to be converted
 
 var rootCmd = &cobra.Command{

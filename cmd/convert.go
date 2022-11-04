@@ -9,7 +9,6 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"syscall"
 
 	"github.com/TwiN/go-color"
@@ -21,8 +20,9 @@ import (
 func init() {
 	// convertCmd.Flags().StringVarP(&EbookConvertPath, "ebook-convert-path", "p", "ebook-convert", "The ebook-convert executable path")
 	convertCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "Verbose output")
+	convertCmd.Flags().BoolVarP(&MoreVerbose, "more-verbose", "m", false, "output the converted output")
 	convertCmd.Flags().IntVarP(&JobsNum, "jobs", "j", 5, "Allow N jobs at once; infinite jobs with no arg")
-	convertCmd.Flags().StringVarP(&OutputPath, "output path", "o", "", "Output path, by default, is the source directory")
+	convertCmd.Flags().StringVarP(&OutputPath, "output-path", "o", "", "Output path, by default, is the source directory")
 	convertCmd.Flags().BoolVarP(&Recursive, "recursive", "r", false, "Recursively search the directory that contains an epub file")
 	convertCmd.Flags().StringVarP(&ToBeConvertedPath, "path-to-convert", "f", "", "The path to be converted, required")
 	rootCmd.AddCommand(convertCmd)
@@ -85,16 +85,23 @@ func getPaths(root string) []*FileObj {
 			if err != nil {
 				return err
 			}
-			rootpath := root
 			if root == ".." {
 				return nil
 			}
+
+			var rootpath string
 			if root == "." {
-				rootpath, err = filepath.Abs(root)
+				rootpath, err = filepath.Abs(ToBeConvertedPath)
 				if err != nil {
 					return err
 				}
-				if Verbose {
+				rootpath = filepath.Join(rootpath, filepath.Dir(fp))
+				if MoreVerbose {
+					log.Info("Current directory: " + rootpath)
+				}
+			} else {
+				rootpath = filepath.Dir(fp)
+				if MoreVerbose {
 					log.Info("Current directory: " + rootpath)
 				}
 			}
@@ -115,18 +122,20 @@ func getPaths(root string) []*FileObj {
 					}
 				}
 			}
-			log.Debug(info.Name())
+
 			if !info.IsDir() && filepath.Ext(fp) != "" && formats[filepath.Ext(fp)] {
-				fileObj := NewFileObj(fileNameWithoutExtension(info.Name()), filepath.Ext(fp), filepath.Dir(filepath.Join(rootpath, fp)), FILE_EXT_PDF)
+				fileObj := NewFileObj(fileNameWithoutExtension(info.Name()), filepath.Ext(fp), rootpath, FILE_EXT_PDF)
+				if !fileExists(fileObj.Abs()) {
+					log.Warn(color.InYellow("File[" + fileObj.Abs() + "] not found"))
+					return nil
+				}
 				files = append(files, fileObj)
 				if Verbose {
-					log.Info("The path[" + filepath.Join(rootpath, fp) + "] to be converted")
+					log.Info("The path[" + fileObj.Abs() + "] to be converted")
 				}
 				return nil
 			}
-			if Verbose {
-				log.Info("Skip the path[" + filepath.Join(rootpath, fp) + "]")
-			}
+
 			return nil
 		})
 	if err != nil {
@@ -136,10 +145,6 @@ func getPaths(root string) []*FileObj {
 	// return strings
 	return files
 
-}
-
-func fileNameWithoutExtension(fileName string) string {
-	return strings.TrimSuffix(filepath.Base(fileName), filepath.Ext(fileName))
 }
 
 func Convert() {
@@ -230,7 +235,7 @@ func Convert() {
 }
 
 func handleReader(reader *bufio.Reader) {
-	printOutput := log.GetLevel() == log.DebugLevel
+	printOutput := MoreVerbose
 	for {
 		str, err := reader.ReadString('\n')
 		if err != nil {
@@ -240,37 +245,4 @@ func handleReader(reader *bufio.Reader) {
 			fmt.Print(str)
 		}
 	}
-}
-
-// clean output directory
-func CleanDir() {
-	dir := "./output"
-	err := makeDirectoryIfNotExists(dir)
-	if err != nil {
-		panic(err)
-	}
-	d, err := os.Open(dir)
-	if err != nil {
-		panic(err)
-	}
-	defer d.Close()
-
-	files, err := d.Readdirnames(-1)
-	if err != nil {
-		panic(err)
-	}
-	for _, name := range files {
-		err = os.RemoveAll(filepath.Join(dir, name))
-		if err != nil {
-			panic(err)
-		}
-	}
-	log.Info("output directory is clean")
-}
-
-func makeDirectoryIfNotExists(path string) error {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return os.Mkdir(path, os.ModeDir|0755)
-	}
-	return nil
 }

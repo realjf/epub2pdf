@@ -1,11 +1,15 @@
 # epub2pdf
 convert epub to pdf
 
-<!-- 
-## Features)
+## Feature
 
-- support linux/windows/macOS
--->
+- specify output path -o=/path
+- specify input path by -f=/path
+- recursive directory by -r
+- output details by -v
+- output debug details by -m
+- allow N jobs at once by -j=N
+- optimize code
 
 
 ## Required
