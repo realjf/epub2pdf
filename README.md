@@ -25,7 +25,7 @@ linux user can run like this to install calibre
 ```sh
 sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
 ```
-
+windows and macOS user can download from [Release Assets](https://github.com/realjf/epub2pdf/releases)
 
 ## Quick start
 ### Option 1: Download binary
