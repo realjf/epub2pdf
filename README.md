@@ -10,7 +10,7 @@ convert epub to pdf
 - -v output details
 - -m output debug details
 - -j=N allow N jobs at once
-- -d delete source file
+- -d delete source file after convert successfully
 - -t specifies the timeout for each conversion, the unit of time is seconds.
 
 
