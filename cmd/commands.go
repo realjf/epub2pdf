@@ -16,6 +16,7 @@ var OutputPath string = ""
 var Recursive bool = false        // recursive directory
 var ToBeConvertedPath string = "" // the directory to be converted
 var DeleteSource bool = false     // delete the source file when convert successfully
+var Timeout int = 10              // convert timeout, default is 10 seconds
 
 var rootCmd = &cobra.Command{
 	Use: "epub2pdf",

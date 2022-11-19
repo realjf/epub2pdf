@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/TwiN/go-color"
 	"github.com/realjf/gopool"
@@ -18,13 +19,14 @@ import (
 
 func init() {
 	// convertCmd.Flags().StringVarP(&EbookConvertPath, "ebook-convert-path", "p", "ebook-convert", "The ebook-convert executable path")
-	convertCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "Verbose output")
-	convertCmd.Flags().BoolVarP(&MoreVerbose, "more-verbose", "m", false, "Output the converted output")
-	convertCmd.Flags().IntVarP(&JobsNum, "jobs", "j", 5, "Allow N jobs at once; infinite jobs with no arg")
-	convertCmd.Flags().StringVarP(&OutputPath, "output-path", "o", "", "Output path, by default, is the source directory")
-	convertCmd.Flags().BoolVarP(&Recursive, "recursive", "r", false, "Recursively search the directory that contains an epub file")
-	convertCmd.Flags().StringVarP(&ToBeConvertedPath, "path-to-convert", "f", "", "The path to be converted, required")
-	convertCmd.Flags().BoolVarP(&DeleteSource, "delete-source", "d", false, "Delete the source file when convert successfully")
+	convertCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "Verbose output.")
+	convertCmd.Flags().BoolVarP(&MoreVerbose, "more-verbose", "m", false, "Output the converted output.")
+	convertCmd.Flags().IntVarP(&JobsNum, "jobs", "j", 5, "Allow N jobs at once; infinite jobs with no arg.")
+	convertCmd.Flags().StringVarP(&OutputPath, "output-path", "o", "", "Output path, by default, is the source directory.")
+	convertCmd.Flags().BoolVarP(&Recursive, "recursive", "r", false, "Recursively search the directory that contains an epub file.")
+	convertCmd.Flags().StringVarP(&ToBeConvertedPath, "path-to-convert", "f", "", "The path to be converted, required.")
+	convertCmd.Flags().BoolVarP(&DeleteSource, "delete-source", "d", false, "Delete the source file when convert successfully.")
+	convertCmd.Flags().IntVarP(&Timeout, "timeout", "t", 10, "Per-job's timeout value; the default is 10; and the unit of time is seconds.")
 	rootCmd.AddCommand(convertCmd)
 }
 
@@ -129,6 +131,7 @@ func Convert() {
 	}
 	convertPool := gopool.NewPool(JobsNum)
 	convertPool.SetTaskNum(len(files))
+	convertPool.SetTimeout(time.Second * time.Duration(Timeout))
 
 	log.Info(color.InRed(strconv.Itoa(len(files))) + " files to be converted")
 
