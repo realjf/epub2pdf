@@ -14,7 +14,7 @@ convert epub to pdf
 - -t specifies the timeout for each conversion.
 
 
-### v0.0.2
+### v0.0.2(latest)
 - -o=/path specify output path
 - -f=/path specify input path
 - -r recursive directory
