@@ -3,7 +3,7 @@ convert epub to pdf
 
 ## Feature
 
-### v0.0.3(todo)
+### v0.0.3(latest)
 - -o=/path specify output path
 - -f=/path specify input path
 - -r recursive directory
@@ -12,9 +12,10 @@ convert epub to pdf
 - -j=N allow N jobs at once
 - -d delete source file after convert successfully
 - -t specifies the timeout for each conversion, the unit of time is seconds.
+- repair the recursive directory error
 
 
-### v0.0.2(latest)
+### v0.0.2
 - -o=/path specify output path
 - -f=/path specify input path
 - -r recursive directory

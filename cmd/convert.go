@@ -74,28 +74,39 @@ func getPaths(root string) []*FileObj {
 				}
 				rootpath = filepath.Join(rootpath, filepath.Dir(fp))
 				if MoreVerbose {
-					log.Info("Current directory: " + rootpath)
+					log.Info("Current directory1: " + rootpath)
 				}
 			} else {
-				rootpath = filepath.Dir(fp)
-				if MoreVerbose {
-					log.Info("Current directory: " + rootpath)
+				if info.IsDir() {
+					rootpath, err = filepath.Abs(fp)
+					if err != nil {
+						return err
+					}
+					if MoreVerbose {
+						log.Info("Current directory2: " + rootpath)
+					}
+				} else {
+					rootpath, err = filepath.Abs(fp)
+					if err != nil {
+						return err
+					}
+					rootpath = filepath.Dir(rootpath)
+					if MoreVerbose {
+						log.Info("Current directory3: " + rootpath)
+					}
 				}
+
 			}
 			if !Recursive {
-				if ro, err := filepath.Abs(rootpath); err != nil {
+				if ro, err := filepath.Abs(root); err != nil {
 					return err
 				} else {
-					if fo, err := filepath.Abs(filepath.Join(rootpath, fp)); err != nil {
-						return err
-					} else {
-						if filepath.Dir(fo) != ro {
-							// Non recursive
-							if Verbose {
-								log.Info("Non recursive: " + filepath.Dir(fo) + "," + ro)
-							}
-							return nil
+					if rootpath != ro {
+						// Non recursive
+						if Verbose {
+							log.Info("Non recursive: " + rootpath + "," + ro)
 						}
+						return nil
 					}
 				}
 			}
@@ -129,6 +140,7 @@ func Convert() {
 	if len(files) < JobsNum {
 		JobsNum = len(files)
 	}
+
 	convertPool := gopool.NewPool(JobsNum)
 	convertPool.SetTaskNum(len(files))
 	convertPool.SetTimeout(time.Second * time.Duration(Timeout))
