@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/TwiN/go-color v1.4.0
-	github.com/realjf/cgroup v0.0.5
+	github.com/realjf/cgroup v0.0.7
 	github.com/realjf/gopool v1.2.3
-	github.com/realjf/relimit v0.0.5
-	github.com/realjf/utils v0.0.21
+	github.com/realjf/relimit v0.0.7
+	github.com/realjf/utils v0.0.23
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
 )

@@ -18,3 +18,13 @@ build_darwin:
 
 push:
 	@git add -A && git commit -m "update" && git push origin master
+
+
+# make tag t=<your_version>
+tag:
+	@echo '${t}'
+	@git tag -a ${t} -m "${t}" && git push origin ${t}
+
+dtag:
+	@echo 'delete ${t}'
+	@git push --delete origin ${t} && git tag -d ${t}
