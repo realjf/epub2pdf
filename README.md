@@ -11,8 +11,9 @@ convert epub to pdf
 - -m output debug details
 - -j=N allow N jobs at once
 - -d delete source file after convert successfully
-- -t specifies the timeout for each conversion, the unit of time is seconds.
+- -t specifies the timeout for each conversion, the unit of time is seconds, default is no limit.
 - repair the recursive directory error
+- cpu and memory limit by cgroup
 
 
 ### v0.0.2
