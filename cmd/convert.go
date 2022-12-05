@@ -175,9 +175,10 @@ func Convert() {
 
 				args := []string{input_file, output_file}
 				cmd := utils.NewCmd()
-				// if os.Getenv("SUDO_USER") != "" {
-				// 	cmd.SetUsername(os.Getenv("SUDO_USER"))
-				// }
+				if os.Getenv("SUDO_USER") != "" {
+					cmd.SetUsername(os.Getenv("SUDO_USER"))
+					cmd.SetNoSetGroups(true)
+				}
 				_, err = cmd.SetDebug(true).RunCommand("ebook-convert", args...)
 				if err != nil {
 					log.Error(color.InRed("======== failed to convert " + input_file + " ========"))
