@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -137,6 +138,8 @@ func getPaths(root string) []*FileObj {
 }
 
 func Convert() {
+	fmt.Printf("=========%v\n", os.Environ())
+	return
 	files := getPaths(ToBeConvertedPath)
 	if len(files) < JobsNum {
 		JobsNum = len(files)
@@ -150,9 +153,9 @@ func Convert() {
 	convertPool.SetDebug(true)
 	log.Info(color.InRed(strconv.Itoa(len(files))) + " files to be converted")
 
-	relimiter := relimit.MustNewRelimit(80, 4*cgroup.Gigabyte, true)
-	relimiter.SetDebug(true)
-	relimiter.GetCmd().SetDebug(true)
+	relimiter := relimit.MustNewRelimit(80, 12*cgroup.Gigabyte, true)
+	// relimiter.SetDebug(true)
+	// relimiter.GetCmd().SetDebug(true)
 	defer relimiter.Close()
 	err := relimiter.StartByPid(os.Getpid())
 	if err != nil {
@@ -179,7 +182,11 @@ func Convert() {
 					cmd.SetUsername(os.Getenv("SUDO_USER"))
 					cmd.SetNoSetGroups(true)
 				}
-				_, err = cmd.SetDebug(true).RunCommand("ebook-convert", args...)
+				envs := os.Environ()
+				// envslices := []string{}
+				// envs = append(envs, envslices...)
+				cmd.SetEnv(envs)
+				_, err = cmd.RunCommand("ebook-convert", args...)
 				if err != nil {
 					log.Error(color.InRed("======== failed to convert " + input_file + " ========"))
 					log.Error(color.InRed(err.Error()))
