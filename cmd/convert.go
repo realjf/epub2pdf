@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -138,8 +137,6 @@ func getPaths(root string) []*FileObj {
 }
 
 func Convert() {
-	fmt.Printf("=========%v\n", os.Environ())
-	return
 	files := getPaths(ToBeConvertedPath)
 	if len(files) < JobsNum {
 		JobsNum = len(files)
@@ -177,7 +174,7 @@ func Convert() {
 				log.Infof("ready to convert %s to %s ...\n", input_file, output_file)
 
 				args := []string{input_file, output_file}
-				cmd := utils.NewCmd()
+				cmd := utils.NewCmd().SetDebug(true)
 				if os.Getenv("SUDO_USER") != "" {
 					cmd.SetUsername(os.Getenv("SUDO_USER"))
 					cmd.SetNoSetGroups(true)
