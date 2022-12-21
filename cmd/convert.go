@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -150,14 +151,20 @@ func Convert() {
 	convertPool.SetDebug(true)
 	log.Info(color.InRed(strconv.Itoa(len(files))) + " files to be converted")
 
-	relimiter := relimit.MustNewRelimit(80, 12*cgroup.Gigabyte, true)
-	// relimiter.SetDebug(true)
-	// relimiter.GetCmd().SetDebug(true)
-	defer relimiter.Close()
-	err := relimiter.StartByPid(os.Getpid())
-	if err != nil {
-		log.Error(err)
-		return
+	if runtime.GOOS == "linux" {
+		relimiter := relimit.MustNewRelimit(80, 12*cgroup.Gigabyte, true)
+		// relimiter.SetDebug(true)
+		// relimiter.GetCmd().SetDebug(true)
+		defer relimiter.Close()
+		err := relimiter.StartByPid(os.Getpid())
+		if err != nil {
+			log.Error(err)
+			return
+		}
+	} else if runtime.GOOS == "windows" {
+
+	} else if runtime.GOOS == "darwin" {
+
 	}
 
 	// add task
