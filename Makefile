@@ -4,6 +4,9 @@ BIN_WIN=".exe"
 BIN_MACOS=""
 ARCH="amd64"
 
+.PHONY: build build_win build_darwin tag dtag
+
+
 build:
 	@env CGO_ENABLED=1 GOOS=linux GOARCH=${ARCH} go build -ldflags '-s -w -X main.Version=${VERSION}' -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}" -o ${BIN}-linux-${ARCH}-${VERSION} main.go
 	@echo 'done'
