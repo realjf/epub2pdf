@@ -1,8 +1,9 @@
 package main
 
 import (
-	"epub2pdf/cmd"
 	"runtime"
+
+	"github.com/realjf/epub2pdf/cmd"
 )
 
 var Version string = ""

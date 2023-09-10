@@ -1,0 +1,22 @@
+# ##############################################################################
+# # File: config.toml                                                          #
+# # Project: app                                                               #
+# # Created Date: 2023/09/11 01:16:31                                          #
+# # Author: realjf                                                             #
+# # -----                                                                      #
+# # Last Modified: 2023/09/11 01:20:40                                         #
+# # Modified By: realjf                                                        #
+# # -----                                                                      #
+# # Copyright (c) 2023 realjf                                                  #
+# ##############################################################################
+
+
+[frontend]
+icon = ""
+name = ""
+ID = "realjf.com"
+version = "0.1.0"
+build = 1
+
+
+[backend]

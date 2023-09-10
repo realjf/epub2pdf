@@ -1,0 +1,270 @@
+# ##############################################################################
+# # File: .golangci-lint.yaml                                                  #
+# # Project: epub2pdf                                                          #
+# # Created Date: 2023/09/10 23:05:16                                          #
+# # Author: realjf                                                             #
+# # -----                                                                      #
+# # Last Modified: 2023/09/10 23:06:47                                         #
+# # Modified By: realjf                                                        #
+# # -----                                                                      #
+# # Copyright (c) 2023 realjf                                                  #
+# ##############################################################################
+
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+    ignore: fmt:.*,io/ioutil:^Read.*
+    disable-default-exclusions: true
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
+  goimports:
+    local-prefixes: ""
+  staticcheck:
+    checks: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
+  stylecheck:
+    checks: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
+    dot-import-whitelist:
+      - "fmt"
+    initialisms: ["ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS"]
+    http-status-code-whitelist: ["200", "400", "404", "500"]
+  tagalign:
+    align: true
+    sort: true
+    order:
+      - json
+      - yaml
+      - yml
+      - toml
+      - mapstructure
+      - binding
+      - validate
+    strict: true
+  tagliatelle:
+    case:
+      use-field-name: true
+      rules:
+        json: camel
+        yaml: camel
+        xml: camel
+        bson: camel
+        avro: snake
+        mapstructure: kebab
+        env: upperSnake
+        envconfig: upperSnake
+  unparam:
+    check-exported: true
+  # variable unused check
+  unused: true
+  varnamelen:
+    max-distance: 25
+    min-name-length: 2
+    check-receiver: true
+    check-return: true
+    check-type-param: true
+    ignore-type-assert-ok: true
+    ignore-map-index-ok: true
+    ignore-chan-recv-ok: true
+    ignore-names:
+      - err
+    ignore-decls:
+      - c echo.Context
+      - t testing.T
+      - f *foo.Bar
+      - e error
+      - i int
+      - const C
+      - T any
+      - m map[string]int
+  whitespace:
+    multi-if: true
+    multi-func: true
+  wsl:
+    allow-assign-and-anything: true
+    allow-assign-and-call: true
+    allow-cuddle-declarations: false
+    allow-multiline-assign: true
+    allow-separated-leading-comment: false
+    allow-trailing-comment: false
+    force-case-trailing-whitespace: 0
+    force-err-cuddling: false
+    force-short-decl-cuddling: false
+    strict-append: true
+  reassign:
+    patterns:
+      - ".*"
+  prealloc:
+    simple: false
+    range-loops: false
+    for-loops: true
+  nonamedreturns:
+    report-error-in-defer: true
+  nilnil:
+    checked-types:
+      - ptr
+      - func
+      - iface
+      - map
+      - chan
+  nestif:
+    min-complexity: 4
+  misspell:
+    locale: US
+    ignore-words: []
+  makezero:
+    always: true
+  maintidx:
+    under: 100
+  loggercheck:
+    kitlog: false
+    klog: false
+    logr: false
+    zap: false
+    require-string-key: true
+    no-printf-like: true
+    rules:
+      - k8s.io/klog/v2.InfoS
+      - (github.com/go-logr/logr.Logger).Error
+      - (*go.uber.org/zap.SugaredLogger).With
+  lll:
+    tab-width: 1
+    line-length: 120
+  grouper:
+    const-require-single-const: true
+    const-require-grouping: true
+    import-require-single-import: true
+    import-require-grouping: true
+    type-require-single-type: true
+    type-require-grouping: true
+    var-require-single-var: true
+    var-require-grouping: true
+  govet:
+    check-shadowing: true
+    enable-all: true
+    disable-all: false
+  gosec:
+    exclude-generated: true
+    severity: medium
+    confidence: medium
+    concurrency: 12
+    includes: [] # means include all rules
+  godox:
+    keywords:
+      - TODO
+      - todo
+  gocyclo:
+    min-complexity: 10
+  gocritic:
+    enabled-checks:
+      - nestingReduce
+      - unnamedResult
+      - ruleguard
+      - truncateCmp
+    disabled-checks:
+      - regexpMust
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+      - opinionated
+  goconst:
+    match-constant: false
+    min-len: 2
+    min-occurrences: 2
+    ignore-tests: true
+    ignore-calls: false
+    numbers: true
+    min: 2
+    max: 2
+  gci:
+    skip-generated: false
+    custom-order: true
+  exhaustruct:
+    include: [] # means all structs will be tested
+  exhaustive:
+    check-generated: true
+    explicit-exhaustive-switch: true
+    explicit-exhaustive-map: true
+    default-signifies-exhaustive: true
+    package-scope-only: true
+    check:
+      - switch
+      - map
+  errchkjson:
+    check-error-free-encoding: true
+    report-no-exported: false
+  dupword:
+    keywords:
+      - "the"
+      - "and"
+      - "a"
+  dogsled:
+    max-blank-identifiers: 3
+  decorder:
+    disable-dec-order-check: false
+    disable-init-func-first-check: false
+    disable-dec-num-check: false
+    dec-order:
+      - type
+      - const
+      - var
+      - func
+    ignore-underscore-vars: false
+    disable-type-dec-num-check: false
+    disable-const-dec-num-check: false
+    disable-var-dec-num-check: false
+  cyclop:
+    skip-tests: true
+    max-complexity: 10
+    package-average: 0.5
+  bidichk:
+    left-to-right-embedding: false
+    right-to-left-embedding: false
+    pop-directional-formatting: false
+    left-to-right-override: false
+    right-to-left-override: false
+    left-to-right-isolate: false
+    right-to-left-isolate: false
+    first-strong-isolate: false
+    pop-directional-isolate: false
+  asasalint:
+    use-builtin-exclusions: false
+    ignore-test: true
+    exclude:
+      - Append
+      - \.Wrapf
+
+# configuration
+run:
+  concurrency: 4
+  timeout: "5m"
+  issue-exit-code: 2
+  tests: false
+  allow-parallel-runners: false
+  go: "1.19"
+severity:
+  default-severity: error
+  case-sensitive: true
+  rules:
+    - linters:
+        - dupl
+      severity: info
+output:
+  format: colored-line-number
+  print-issued-lines: false
+  print-linter-name: false
+  unique-by-line: false
+  path-prefix: "lint-"
+  sort-results: false
+issues:
+  exclude-use-default: false
+  exclude-case-sensitive: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
+  fix: false
+
