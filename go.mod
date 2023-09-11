@@ -4,10 +4,11 @@ go 1.18
 
 require (
 	fyne.io/fyne/v2 v2.4.0
-	github.com/TwiN/go-color v1.4.0
+	github.com/TwiN/go-color v1.4.1
+	github.com/realjf/gopool v1.2.5
 	github.com/realjf/gopool/v2 v2.0.0
 	github.com/realjf/utils v0.0.28
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.8.1
 )
@@ -47,7 +48,7 @@ require (
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda // indirect
 	golang.org/x/net v0.14.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.12.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

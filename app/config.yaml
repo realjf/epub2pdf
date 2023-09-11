@@ -4,7 +4,7 @@
 # # Created Date: 2023/09/10 23:19:21                                          #
 # # Author: realjf                                                             #
 # # -----                                                                      #
-# # Last Modified: 2023/09/10 23:47:20                                         #
+# # Last Modified: 2023/09/11 12:54:59                                         #
 # # Modified By: realjf                                                        #
 # # -----                                                                      #
 # # Copyright (c) 2023 realjf                                                  #
@@ -13,5 +13,8 @@
 
 frontend:
   title: "E-book conversion tool"
+  ID: "realjf.com"
 
 backend:
+  log:
+    level: "debug"
