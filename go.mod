@@ -5,7 +5,7 @@ go 1.18
 require (
 	fyne.io/fyne/v2 v2.4.0
 	github.com/TwiN/go-color v1.4.0
-	github.com/realjf/gopool v1.2.3
+	github.com/realjf/gopool/v2 v2.0.0
 	github.com/realjf/utils v0.0.28
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
