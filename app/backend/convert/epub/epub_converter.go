@@ -1,15 +1,15 @@
 // #############################################################################
-// # File: epub_to_pdf.go                                                      #
-// # Project: convert                                                          #
-// # Created Date: 2023/09/11 07:45:50                                         #
+// # File: epub_converter.go                                                   #
+// # Project: epub                                                             #
+// # Created Date: 2023/09/11 16:20:52                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/11 13:53:02                                        #
+// # Last Modified: 2023/09/11 16:25:21                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
 // #############################################################################
-package convert
+package epub
 
 import (
 	"context"
@@ -23,7 +23,21 @@ import (
 	"github.com/realjf/epub2pdf/app/backend/utils"
 )
 
-func EpubToPDF(ctx context.Context, req *model.EpubToPDFReq) {
+type EpubConverter interface {
+	ToPDF(req *model.ConvertReq)
+}
+
+type epubConverter struct {
+	ctx context.Context
+}
+
+func NewEpubConverter(ctx context.Context) EpubConverter {
+	return &epubConverter{
+		ctx: ctx,
+	}
+}
+
+func (e *epubConverter) ToPDF(req *model.ConvertReq) {
 	files := req.InputFiles
 	if len(files) < req.JobsNum {
 		req.JobsNum = len(files)
@@ -42,7 +56,7 @@ func EpubToPDF(ctx context.Context, req *model.EpubToPDFReq) {
 		for _, filename := range files {
 			x := filename
 			err := convertPool.AddTask(func() {
-				err := epub2pdf_task(x, req)
+				err := e.toPDF(x, req)
 				if err != nil {
 					log.Errorf("error converting: %v", err)
 				}
@@ -63,7 +77,8 @@ func EpubToPDF(ctx context.Context, req *model.EpubToPDFReq) {
 	log.Info("all done!!!")
 }
 
-func epub2pdf_task(fileObj *model.FileObj, req *model.EpubToPDFReq) (err error) {
+func (e *epubConverter) toPDF(fileObj *model.FileObj, req *model.ConvertReq) (err error) {
+
 	input_file := fileObj.Abs()
 	output_file := fileObj.ToRootPath(req.OutputPath).ToAbs()
 	log.Debugf("ready to convert %s to %s ...\n", input_file, output_file)

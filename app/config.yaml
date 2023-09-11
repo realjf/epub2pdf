@@ -4,7 +4,7 @@
 # # Created Date: 2023/09/10 23:19:21                                          #
 # # Author: realjf                                                             #
 # # -----                                                                      #
-# # Last Modified: 2023/09/11 12:54:59                                         #
+# # Last Modified: 2023/09/11 16:29:08                                         #
 # # Modified By: realjf                                                        #
 # # -----                                                                      #
 # # Copyright (c) 2023 realjf                                                  #
@@ -17,4 +17,4 @@ frontend:
 
 backend:
   log:
-    level: "debug"
+    level: "debug" # trace | debug | info | warn | error | fatal | panic

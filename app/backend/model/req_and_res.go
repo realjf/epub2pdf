@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 12:52:00                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/11 13:43:30                                        #
+// # Last Modified: 2023/09/11 15:47:36                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-type EpubToPDFReq struct {
+type ConvertReq struct {
 	InputFiles []*FileObj
 	OutputPath string
 	JobsNum    int
@@ -23,5 +23,5 @@ type EpubToPDFReq struct {
 	IsDelete   bool // Delete source file after converted done
 }
 
-type EpubToPDFRes struct {
+type ConvertRes struct {
 }

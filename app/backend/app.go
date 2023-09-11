@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 00:19:54                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/11 13:57:29                                        #
+// # Last Modified: 2023/09/11 15:40:24                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -18,7 +18,6 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/TwiN/go-color"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/realjf/epub2pdf/app/backend/model"
@@ -91,13 +90,33 @@ func (b *bApp) Run() {
 
 }
 
-func (b *bApp) getPaths(root string) []*model.FileObj {
+func (b *bApp) getPaths() []*model.FileObj {
 	b.lock.Lock()
 	defer b.lock.Unlock()
+	root := b.inputPath
 	formats := map[string]bool{model.FILE_EXT_EPUB: true}
 
 	files := []*model.FileObj{}
-	err := filepath.Walk(root,
+
+	fileinfo, err := os.Stat(root)
+	if os.IsNotExist(err) {
+		log.Error(err)
+		return files
+	}
+
+	if !fileinfo.IsDir() {
+		// if it is a file
+		fileObj := model.NewFileObj(utils.FileNameWithoutExtension(fileinfo.Name()), filepath.Ext(root), filepath.Dir(root), model.FILE_EXT_PDF)
+		if !utils.FileExists(fileObj.Abs()) {
+			log.Warn("File[" + fileObj.Abs() + "] not found")
+			return nil
+		}
+		files = append(files, fileObj)
+		return files
+	}
+
+	// if it is a directory
+	err = filepath.Walk(root,
 		func(fp string, info os.FileInfo, err error) error {
 			if err != nil {
 				log.Error(err)
@@ -152,7 +171,7 @@ func (b *bApp) getPaths(root string) []*model.FileObj {
 			if !info.IsDir() && filepath.Ext(fp) != "" && formats[filepath.Ext(fp)] {
 				fileObj := model.NewFileObj(utils.FileNameWithoutExtension(info.Name()), filepath.Ext(fp), rootpath, model.FILE_EXT_PDF)
 				if !utils.FileExists(fileObj.Abs()) {
-					log.Warn(color.InYellow("File[" + fileObj.Abs() + "] not found"))
+					log.Warn("File[" + fileObj.Abs() + "] not found")
 					return nil
 				}
 				files = append(files, fileObj)
