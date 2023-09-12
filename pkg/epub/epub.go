@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 21:46:21                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 09:17:00                                        #
+// # Last Modified: 2023/09/12 17:11:53                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -12,6 +12,7 @@
 package epub
 
 import (
+	"archive/zip"
 	"fmt"
 	"io"
 	"io/fs"
@@ -24,7 +25,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gofrs/uuid"
 	"github.com/vincent-petithory/dataurl"
 )
 
@@ -53,6 +53,7 @@ type Epub interface {
 
 	WriteTo(dst io.Writer) (int64, error)
 	Write(destFilePath string) error
+	Close() error
 }
 
 type epub struct {
@@ -77,30 +78,9 @@ type epub struct {
 
 	sections []epubSection
 	cover    *epubCover
-}
 
-func NewEpub(title string) Epub {
-	e := &epub{
-		Client: http.DefaultClient,
-		css:    make(map[string]string),
-		fonts:  make(map[string]string),
-		images: make(map[string]string),
-		videos: make(map[string]string),
-		audios: make(map[string]string),
-		cover: &epubCover{
-			cssFilename:   "",
-			cssTempFile:   "",
-			imageFilename: "",
-			xhtmlFilename: "",
-		},
-		toc: newToc(),
-	}
-
-	e.SetIdentifier(urnUUIDPrefix + uuid.Must(uuid.NewV4()).String())
-	e.SetLang(defaultEpubLang)
-	e.SetTitle(title)
-
-	return e
+	file *os.File
+	zip  *zip.Reader
 }
 
 type epubCover struct {
@@ -114,6 +94,13 @@ type epubSection struct {
 	filename string
 	xhtml    *xhtml
 	children *[]epubSection
+}
+
+func (e *epub) Close() (err error) {
+	if e.file != nil {
+		return e.file.Close()
+	}
+	return
 }
 
 // ============================================ content ==============================================
