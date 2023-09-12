@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/12 16:37:30                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 17:10:26                                        #
+// # Last Modified: 2023/09/12 21:50:17                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -13,22 +13,28 @@ package epub
 
 import (
 	"archive/zip"
+	"encoding/xml"
 	"io"
 	"net/http"
 	"os"
+	"path"
+	"strings"
+
+	"github.com/pkg/errors"
+	"golang.org/x/net/html/charset"
 )
 
-func OpenEpub(filename string) (e Epub, err error) {
+func OpenEpub(filename string) (Epub, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	fileInfo, err := file.Stat()
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
-	e1 := &epub{
+	e := &epub{
 		Client: http.DefaultClient,
 		css:    make(map[string]string),
 		fonts:  make(map[string]string),
@@ -45,12 +51,14 @@ func OpenEpub(filename string) (e Epub, err error) {
 		file: file,
 	}
 
-	err = e1.load(e1.file, fileInfo.Size())
+	err = e.load(e.file, fileInfo.Size())
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return e, nil
 }
+
+// ============================================ load epub file ==============================================
 
 func (e *epub) load(r io.ReaderAt, size int64) (err error) {
 	e.zip, err = zip.NewReader(r, size)
@@ -58,6 +66,90 @@ func (e *epub) load(r io.ReaderAt, size int64) (err error) {
 		return
 	}
 
+	e.rootPath, err = getRootPath(e.zip)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
 	return e.parseFile()
 }
 
+type containerXML struct {
+	// FIXME: only support for one rootfile, can it be more than one?
+	Rootfile rootfile `xml:"rootfiles>rootfile"`
+}
+type rootfile struct {
+	Path string `xml:"full-path,attr"`
+}
+
+func openOPF(file *zip.Reader) (io.ReadCloser, error) {
+	path, err := getOpfPath(file)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return openFile(file, path)
+}
+
+func getRootPath(file *zip.Reader) (string, error) {
+	opfPath, err := getOpfPath(file)
+	if err != nil {
+		return "", errors.WithStack(err)
+	}
+	pathDir := path.Dir(opfPath)
+	if pathDir == "." {
+		return "", nil
+	} else {
+		return path.Dir(opfPath) + "/", nil
+	}
+}
+
+func getOpfPath(file *zip.Reader) (string, error) {
+	f, err := openFile(file, "META-INF/container.xml")
+	if err != nil {
+		return "", errors.WithStack(err)
+	}
+	defer f.Close()
+
+	var c containerXML
+	err = decodeXML(f, &c)
+	if err != nil {
+		return "", errors.WithStack(err)
+	}
+	return c.Rootfile.Path, nil
+}
+
+func decodeXML(file io.Reader, v interface{}) error {
+	decoder := xml.NewDecoder(file)
+	decoder.Entity = xml.HTMLEntity
+	decoder.CharsetReader = charset.NewReaderLabel
+	err := decoder.Decode(v)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	return nil
+}
+
+func openFile(file *zip.Reader, path string) (io.ReadCloser, error) {
+	for _, f := range file.File {
+		if f.Name == path {
+			reader, err := f.Open()
+			if err != nil {
+				return nil, errors.WithStack(err)
+			}
+			return reader, nil
+		}
+	}
+
+	pathLower := strings.ToLower(path)
+	for _, f := range file.File {
+		if strings.ToLower(f.Name) == pathLower {
+			reader, err := f.Open()
+			if err != nil {
+				return nil, errors.WithStack(err)
+			}
+			return reader, nil
+		}
+	}
+
+	return nil, errors.WithStack(errors.New("File " + path + " not found"))
+}

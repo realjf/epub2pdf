@@ -4,21 +4,23 @@
 // # Created Date: 2023/09/12 17:13:13                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 17:24:07                                        #
+// # Last Modified: 2023/09/12 21:32:19                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
 // #############################################################################
 package epub
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestOpenEpub(t *testing.T) {
-	e, err := OpenEpub("~/Downloads/8d3368bd-baf3-4cf6-b1d6-08358193b6b1.epub")
+	e, err := OpenEpub("/home/realjf/Downloads/a78fa0b1-ee40-460f-9c0a-3a4ffab81287.epub")
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("%+v\n", err)
 		return
 	}
 	defer e.Close()
-
+	return
 }

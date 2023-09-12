@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 21:46:21                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 17:11:53                                        #
+// # Last Modified: 2023/09/12 21:42:37                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -79,8 +79,9 @@ type epub struct {
 	sections []epubSection
 	cover    *epubCover
 
-	file *os.File
-	zip  *zip.Reader
+	file     *os.File
+	zip      *zip.Reader
+	rootPath string
 }
 
 type epubCover struct {
