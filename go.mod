@@ -5,12 +5,15 @@ go 1.18
 require (
 	fyne.io/fyne/v2 v2.4.0
 	github.com/TwiN/go-color v1.4.1
+	github.com/gabriel-vasile/mimetype v1.4.2
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/realjf/gopool v1.2.5
 	github.com/realjf/gopool/v2 v2.0.0
 	github.com/realjf/utils v0.0.28
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.8.1
+	github.com/vincent-petithory/dataurl v1.0.0
 )
 
 require (
