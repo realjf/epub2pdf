@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/12 07:16:25                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 07:51:58                                        #
+// # Last Modified: 2023/09/12 09:07:28                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -12,7 +12,7 @@
 package memory
 
 import (
-	"io/ioutil"
+	"io"
 	"path"
 	"path/filepath"
 	"testing"
@@ -86,7 +86,7 @@ func TestMemory(t *testing.T) {
 	if err != nil {
 		t.Fatalf("open error: %v", err)
 	}
-	content, err := ioutil.ReadAll(f)
+	content, err := io.ReadAll(f)
 	if err != nil {
 		t.Fatalf("readall error: %v", err)
 	}

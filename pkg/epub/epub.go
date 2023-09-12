@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 21:46:21                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 08:08:48                                        #
+// # Last Modified: 2023/09/12 09:17:00                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -13,6 +13,7 @@ package epub
 
 import (
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"net/http"
@@ -23,10 +24,35 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/gofrs/uuid"
 	"github.com/vincent-petithory/dataurl"
 )
 
 type Epub interface {
+	AddCSS(source string, internalFilename string) (string, error)
+	AddFont(source string, internalFilename string) (string, error)
+	AddImage(source string, imageFilename string) (string, error)
+	AddVideo(source string, videoFilename string) (string, error)
+	AddAudio(source string, audioFilename string) (string, error)
+	AddSection(body string, sectionTitle string, internalFilename string, internalCSSPath string) (string, error)
+	AddSubSection(parentFilename string, body string, sectionTitle string, internalFilename string, internalCSSPath string) (string, error)
+	Author() string
+	Identifier() string
+	Lang() string
+	Description() string
+	Ppd() string
+	SetAuthor(author string)
+	SetCover(internalImagePath string, internalCSSPath string)
+	SetIdentifier(identifier string)
+	SetLang(lang string)
+	SetDescription(desc string)
+	SetPpd(direction string)
+	SetTitle(title string)
+	Title() string
+	EmbedImages()
+
+	WriteTo(dst io.Writer) (int64, error)
+	Write(destFilePath string) error
 }
 
 type epub struct {
@@ -61,7 +87,18 @@ func NewEpub(title string) Epub {
 		images: make(map[string]string),
 		videos: make(map[string]string),
 		audios: make(map[string]string),
+		cover: &epubCover{
+			cssFilename:   "",
+			cssTempFile:   "",
+			imageFilename: "",
+			xhtmlFilename: "",
+		},
+		toc: newToc(),
 	}
+
+	e.SetIdentifier(urnUUIDPrefix + uuid.Must(uuid.NewV4()).String())
+	e.SetLang(defaultEpubLang)
+	e.SetTitle(title)
 
 	return e
 }
@@ -78,9 +115,6 @@ type epubSection struct {
 	xhtml    *xhtml
 	children *[]epubSection
 }
-
-
-
 
 // ============================================ content ==============================================
 

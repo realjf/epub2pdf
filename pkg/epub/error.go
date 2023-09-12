@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/12 08:08:33                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 08:08:50                                        #
+// # Last Modified: 2023/09/12 09:05:42                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -42,4 +42,14 @@ type ParentDoesNotExistError struct {
 
 func (e *ParentDoesNotExistError) Error() string {
 	return fmt.Sprintf("Parent with the internal filename %s does not exist", e.Filename)
+}
+
+// UnableToCreateEpubError is thrown by Write if it cannot create the destination EPUB file
+type UnableToCreateEpubError struct {
+	Path string // The path that was given to Write to create the EPUB
+	Err  error  // The underlying error that was thrown
+}
+
+func (e *UnableToCreateEpubError) Error() string {
+	return fmt.Sprintf("Error creating EPUB at %q: %+v", e.Path, e.Err)
 }

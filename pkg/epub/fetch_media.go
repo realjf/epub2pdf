@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/12 08:04:35                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 08:04:46                                        #
+// # Last Modified: 2023/09/12 09:07:10                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -16,7 +16,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -167,7 +166,7 @@ func (g grabber) dataURLHandler(mediaSource string, onlyCheck bool) (io.ReadClos
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.NopCloser(bytes.NewReader(data.Data)), nil
+	return io.NopCloser(bytes.NewReader(data.Data)), nil
 }
 
 type fetchError []error

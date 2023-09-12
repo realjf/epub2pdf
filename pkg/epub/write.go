@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/12 08:02:07                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 08:03:18                                        #
+// # Last Modified: 2023/09/12 09:05:38                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -24,15 +24,6 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-// UnableToCreateEpubError is thrown by Write if it cannot create the destination EPUB file
-type UnableToCreateEpubError struct {
-	Path string // The path that was given to Write to create the EPUB
-	Err  error  // The underlying error that was thrown
-}
-
-func (e *UnableToCreateEpubError) Error() string {
-	return fmt.Sprintf("Error creating EPUB at %q: %+v", e.Path, e.Err)
-}
 
 // WriteTo the dest io.Writer. The return value is the number of bytes written. Any error encountered during the write is also returned.
 func (e *epub) WriteTo(dst io.Writer) (int64, error) {

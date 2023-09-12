@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 22:07:35                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/12 07:04:37                                        #
+// # Last Modified: 2023/09/12 09:13:00                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -176,100 +176,4 @@ func (t *toc) writeNcxDoc(tempDir string) {
 		panic(fmt.Sprintf("Error writing EPUB v2 TOC file: %s", err))
 	}
 }
-
-// ============================================ nav.xhtml ==============================================
-
-// This holds the body XML for the EPUB v3 TOC file (nav.xhtml). Since this is
-// an XHTML file, the rest of the structure is handled by the xhtml type
-//
-// Sample: https://github.com/bmaupin/epub-samples/blob/master/minimal-v3plus2/EPUB/nav.xhtml
-// Spec: http://www.idpf.org/epub/301/spec/epub-contentdocs.html#sec-xhtml-nav
-type tocNavBody struct {
-	XMLName  xml.Name     `xml:"nav"`
-	EpubType string       `xml:"epub:type,attr"`
-	H1       string       `xml:"h1"`
-	Links    []tocNavItem `xml:"ol>li"`
-}
-
-// Constructor for tocNavBody
-func newTocNavXML() *tocNavBody {
-	b := &tocNavBody{
-		EpubType: tocNavEpubType,
-	}
-	err := xml.Unmarshal([]byte(tocNavBodyTemplate), &b)
-	if err != nil {
-		panic(fmt.Sprintf(
-			"Error unmarshalling tocNavBody: %s\n"+
-				"\ttocNavBody=%#v\n"+
-				"\ttocNavBodyTemplate=%s",
-			err,
-			*b,
-			tocNavBodyTemplate))
-	}
-
-	return b
-}
-
-type tocNavItem struct {
-	A        tocNavLink    `xml:"a"`
-	Children *[]tocNavItem `xml:"ol>li,omitempty"`
-}
-
-type tocNavLink struct {
-	XMLName xml.Name `xml:"a"`
-	Href    string   `xml:"href,attr"`
-	Data    string   `xml:",chardata"`
-}
-
-// ============================================ toc.ncx ==============================================
-
-// This holds the XML for the EPUB v2 TOC file (toc.ncx). This is added so the
-// resulting EPUB v3 file will still work with devices that only support EPUB v2
-//
-// Sample: https://github.com/bmaupin/epub-samples/blob/master/minimal-v3plus2/EPUB/toc.ncx
-// Spec: http://www.idpf.org/epub/20/spec/OPF_2.0.1_draft.htm#Section2.4.1
-type tocNcxRoot struct {
-	XMLName xml.Name         `xml:"http://www.daisy.org/z3986/2005/ncx/ ncx"`
-	Version string           `xml:"version,attr"`
-	Meta    tocNcxMeta       `xml:"head>meta"`
-	Title   string           `xml:"docTitle>text"`
-	Author  string           `xml:"docAuthor>text"`
-	NavMap  []tocNcxNavPoint `xml:"navMap>navPoint"`
-}
-
-// Constructor for tocNcxRoot
-func newTocNcxXML() *tocNcxRoot {
-	n := &tocNcxRoot{}
-
-	err := xml.Unmarshal([]byte(tocNcxTemplate), &n)
-	if err != nil {
-		panic(fmt.Sprintf(
-			"Error unmarshalling tocNcxRoot: %s\n"+
-				"\ttocNcxRoot=%#v\n"+
-				"\ttocNcxTemplate=%s",
-			err,
-			*n,
-			tocNcxTemplate))
-	}
-
-	return n
-}
-
-type tocNcxContent struct {
-	Src string `xml:"src,attr"`
-}
-
-type tocNcxMeta struct {
-	Name    string `xml:"name,attr"`
-	Content string `xml:"content,attr"`
-}
-
-type tocNcxNavPoint struct {
-	XMLName  xml.Name          `xml:"navPoint"`
-	ID       string            `xml:"id,attr"`
-	Text     string            `xml:"navLabel>text"`
-	Content  tocNcxContent     `xml:"content"`
-	Children *[]tocNcxNavPoint `xml:"navPoint,omitempty"`
-}
-
 
