@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/10 23:02:14                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/10 23:43:43                                        #
+// # Last Modified: 2024/02/04 15:52:33                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -16,6 +16,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/widget"
 )
 
 type FApp interface {
@@ -50,6 +51,9 @@ func (a *fApp) SetContent(content fyne.CanvasObject) {
 }
 
 func (a *fApp) Run() {
+	if a.content == nil {
+		a.content = widget.NewLabel("Hello World!")
+	}
 	a.win.SetContent(a.content)
 	a.win.ShowAndRun()
 }
