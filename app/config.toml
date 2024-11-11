@@ -4,7 +4,7 @@
 # # Created Date: 2023/09/11 01:16:31                                          #
 # # Author: realjf                                                             #
 # # -----                                                                      #
-# # Last Modified: 2024/11/11 11:33:04                                         #
+# # Last Modified: 2024/11/11 13:16:45                                         #
 # # Modified By: realjf                                                        #
 # # -----                                                                      #
 # # Copyright (c) 2023 realjf                                                  #
@@ -18,12 +18,16 @@ ID = "realjf.com"
 version = "0.1.0"
 build = 1
 
+[frontend.screen]
+width = 1024
+height = 800
+
 
 [backend]
 
 
 [backend.log]
-level = "debug"                  # trace | debug | info | warn | error | fatal | panic
+level = "debug"                  # debug | info | warn | error | fatal | panic
 compress = true
 maxSize = 10
 maxAge = 30

@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/10 23:15:52                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/11/11 11:31:35                                        #
+// # Last Modified: 2024/11/11 13:10:48                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -62,6 +62,12 @@ type FConfig struct {
 	Icon    string `toml:"icon"`
 	Version string `toml:"version"`
 	Build   int64  `toml:"build"`
+	Screen  Screen `toml:"screen"`
+}
+
+type Screen struct {
+	Width  float32 `toml:"width"`
+	Height float32 `toml:"height"`
 }
 
 type BConfig struct {
