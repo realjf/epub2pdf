@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/10 23:15:52                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/11/11 13:10:48                                        #
+// # Last Modified: 2024/11/11 21:13:22                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -13,6 +13,7 @@
 package config
 
 import (
+	"flag"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -23,6 +24,8 @@ var cfgFile string
 var GlobalConfig Config
 
 func InitConfig() {
+	flag.StringVar(&cfgFile, "f", "config.toml", "config file path")
+	flag.Parse()
 	if cfgFile == "" {
 		cfgFile = os.Getenv("EPUB2PDF_CONFIG_PATH")
 	}
