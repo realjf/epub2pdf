@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/10 23:19:37                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/02/04 15:36:48                                        #
+// # Last Modified: 2024/11/11 11:31:43                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -19,12 +19,22 @@ import (
 	"github.com/realjf/epub2pdf/app/config"
 	_ "github.com/realjf/epub2pdf/app/config"
 	"github.com/realjf/epub2pdf/app/frontend"
+	"github.com/realjf/zlog"
 )
 
 var Version string = ""
 
 func main() {
 	config.InitConfig()
+	zlog.InitZLog(&zlog.ZLogConfig{
+		Level:    config.GlobalConfig.Backend.Log.Level,
+		Compress: config.GlobalConfig.Backend.Log.Compress,
+		LogMode:  "file",
+		Encoding: "json",
+		MaxSize:  config.GlobalConfig.Backend.Log.MaxSize,
+		MaxAge:   config.GlobalConfig.Backend.Log.MaxAge,
+		LogFile:  config.GlobalConfig.Backend.Log.Filename,
+	})
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP)
 	appName := config.GlobalConfig.Frontend.Name

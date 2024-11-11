@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/10 23:15:52                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/02/04 15:16:18                                        #
+// # Last Modified: 2024/11/11 11:31:35                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -16,6 +16,7 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
+	"github.com/realjf/zlog"
 )
 
 var cfgFile string
@@ -68,5 +69,9 @@ type BConfig struct {
 }
 
 type Log struct {
-	Level string `toml:"level"`
+	Level    zlog.LogLevel `toml:"level"`    // 日志级别
+	Compress bool          `toml:"compress"` // 日志是否压缩
+	MaxAge   int           `toml:"maxAge"`   // 日志保留天数
+	MaxSize  int           `toml:"maxSize"`  // 单个日志文件最大大小
+	Filename string        `toml:"filename"` // 日志文件存储路径
 }

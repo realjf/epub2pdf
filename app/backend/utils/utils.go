@@ -4,7 +4,7 @@
 // # Created Date: 2023/09/11 07:41:28                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/09/11 15:32:25                                        #
+// # Last Modified: 2024/11/11 11:42:33                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023 realjf                                                 #
@@ -16,7 +16,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/realjf/zlog"
 )
 
 // return true means file exists
@@ -37,29 +37,29 @@ func FileNameWithoutExtension(fileName string) string {
 func CleanDir(dir string) {
 	err := MakeDirectoryIfNotExists(dir)
 	if err != nil {
-		log.Error(err)
+		zlog.ZLog().Error(err.Error())
 		return
 	}
 	d, err := os.Open(dir)
 	if err != nil {
-		log.Error(err)
+		zlog.ZLog().Error(err.Error())
 		return
 	}
 	defer d.Close()
 
 	files, err := d.Readdirnames(-1)
 	if err != nil {
-		log.Error(err)
+		zlog.ZLog().Error(err.Error())
 		return
 	}
 	for _, name := range files {
 		err = os.RemoveAll(filepath.Join(dir, name))
 		if err != nil {
-			log.Error(err)
+			zlog.ZLog().Error(err.Error())
 			return
 		}
 	}
-	log.Info("output directory is clean")
+	zlog.ZLog().Info("output directory is clean")
 }
 
 func MakeDirectoryIfNotExists(path string) error {
