@@ -18,3 +18,5 @@
 .vscode
 bin
 *.log
+
+.cache/
