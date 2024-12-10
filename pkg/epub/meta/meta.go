@@ -4,7 +4,7 @@
 // # Created Date: 2024/12/09 23:00:41                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/12/09 23:31:07                                        #
+// # Last Modified: 2024/12/10 07:26:50                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // #                                                                           #
@@ -90,6 +90,7 @@ func (m *MetaCommand) parseContentOPF() (err error) {
 
 	fmt.Println("Metadata:")
 	fmt.Printf("  Title: %s\n", m.pkg.Metadata.Title)
+	fmt.Printf("  Description: %s\n", m.pkg.Metadata.Description)
 	fmt.Printf("  Creator: %s\n", m.pkg.Metadata.Creator)
 	fmt.Printf("  Language: %s\n", m.pkg.Metadata.Language)
 	fmt.Printf("  Identifier: %s\n", m.pkg.Metadata.Identifier)

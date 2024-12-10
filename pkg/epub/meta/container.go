@@ -4,7 +4,7 @@
 // # Created Date: 2024/12/09 23:05:47                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2024/12/09 23:20:54                                        #
+// # Last Modified: 2024/12/10 07:24:21                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // #                                                                           #
@@ -35,6 +35,7 @@ type Package struct {
 
 type Metadata struct {
 	Title       string `xml:"dc:title"`
+	Description string `xml:"dc:description"`
 	Creator     string `xml:"dc:creator"`
 	Language    string `xml:"dc:language"`
 	Identifier  string `xml:"dc:identifier"`
